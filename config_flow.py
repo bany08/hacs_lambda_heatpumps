@@ -9,7 +9,7 @@ from homeassistant.components.persistent_notification import create as persisten
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
 
-from .const import DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CONF_SLAVE_ID, DEFAULT_PORT, DEFAULT_SLAVE_ID
+from .const import DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CONF_SLAVE_ID, DEFAULT_PORT, DEFAULT_SLAVE_ID, CONF_MODEL, CONF_AMOUNT_OF_HEATPUMPS, CONF_AMOUNT_OF_BOILERS, CONF_AMOUNT_OF_BUFFERS, CONF_AMOUNT_OF_SOLAR, CONF_AMOUNT_OF_HEAT_CIRCUITS
 
 class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
@@ -59,7 +59,12 @@ class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                                 CONF_MODBUS_HOST: user_input[CONF_MODBUS_HOST],
                                 CONF_MODBUS_PORT: user_input[CONF_MODBUS_PORT],
                                 CONF_SLAVE_ID: user_input[CONF_SLAVE_ID],
-                                "model": user_input["model"]
+                                "model": user_input[CONF_MODEL],
+                                "amount_of_heatpumps": user_input[CONF_AMOUNT_OF_HEATPUMPS],
+                                "amount_of_boilers": user_input[CONF_AMOUNT_OF_BOILERS],
+                                "amount_of_buffers": user_input[CONF_AMOUNT_OF_BUFFERS],
+                                "amount_of_solar": user_input[CONF_AMOUNT_OF_SOLAR],
+                                "amount_of_heat_circuits": user_input[CONF_AMOUNT_OF_HEAT_CIRCUITS]
                             }
                         )
             except ConnectionException:
@@ -84,14 +89,24 @@ class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_MODBUS_HOST): str,
                     vol.Required(CONF_MODBUS_PORT, default=DEFAULT_PORT): int,
                     vol.Required(CONF_SLAVE_ID, default=DEFAULT_SLAVE_ID): int,
-                    vol.Required("model"): vol.In(model_options)
+                    vol.Required("model"): vol.In(model_options),
+                    vol.Required(CONF_AMOUNT_OF_HEATPUMPS, default=1): int,
+                    vol.Required(CONF_AMOUNT_OF_BOILERS, default=1): int,
+                    vol.Required(CONF_AMOUNT_OF_BUFFERS, default=1): int,
+                    vol.Required(CONF_AMOUNT_OF_SOLAR, default=0): int,
+                    vol.Required(CONF_AMOUNT_OF_HEAT_CIRCUITS, default=1): int
                 }
             ),
             description_placeholders={
                 "modbus_host": translations.get("config.step.user.data.modbus_host", "Modbus Host"),
                 "modbus_port": translations.get("config.step.user.data.modbus_port", "Modbus Port"),
                 "slave_id": translations.get("config.step.user.data.slave_id", "Slave ID"),
-                "model": translations.get("config.step.user.data.model", "Model")
+                "model": translations.get("config.step.user.data.model", "Model"),
+                "amount_of_heatpumps": translations.get("config.step.user.data.amount_of_heatpumps", "Amount of Heatpumps"),
+                "amount_of_boilers": translations.get("config.step.user.data.amount_of_boilers", "Amount of Boilers"),
+                "amount_of_buffers": translations.get("config.step.user.data.amount_of_buffers", "Amount of Buffers"),
+                "amount_of_solar": translations.get("config.step.user.data.amount_of_solar", "Amount of Solar thermal systems"),
+                "amount_of_heat_circuits": translations.get("config.step.user.data.amount_of_heat_circuits", "Amount of Heat Circuits")
             },
             errors=errors,
         )

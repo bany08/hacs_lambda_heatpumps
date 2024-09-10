@@ -3,17 +3,22 @@
     "config": {
         "step": {
             "init": {
-                "title": "Lambda Heatpumps - Authentication",
+                "title": "Lambda Heatpump setup",
                 "description": "Set up your Lambda Heatpumps to integrate with Home Assistant.",
                 "data": {
                     "modbus_host": "Modbus Host",
                     "modbus_port": "Modbus Port",
                     "slave_id": "Slave ID",
-                    "model": "Model"
+                    "model": "Model",
+                    "amount_of_heatpumps": "Amount of Heatpumps",
+                    "amount_of_boilers": "Amount of Boilers",
+                    "amount_of_buffers": "Amount of Buffers",
+                    "amount_of_solar": "Amount of Solar thermal systems",
+                    "amount_of_heat_circuits": "Amount of Heat Circuits"
                 }
             },
             "reauth_confirm": {
-                "title": "Lambda Heatpumps - Reauthentication",
+                "title": "Lambda Heatpump re-setup",
                 "description": "Your account is unable to authenticate. Click Submit to re-setup."
             }
         },

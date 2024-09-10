@@ -3,17 +3,22 @@
     "config": {
         "step": {
             "user": {
-                "title": "Lambda Wärmepumpen - Authentifizierung",
+                "title": "Lambda Wärmepumpe einrichten",
                 "description": "Richten Sie Ihre Lambda Wärmepumpen ein, um sie in Home Assistant zu integrieren.",
                 "data": {
                     "modbus_host": "Modbus Host",
                     "modbus_port": "Modbus Port",
                     "slave_id": "Slave ID",
-                    "model": "Modell"
+                    "model": "Modell",
+                    "amount_of_heatpumps": "Anzahl der Wärmepumpen",
+                    "amount_of_boilers": "Anzahl der Brauchwasserspeicher",
+                    "amount_of_buffers": "Anzahl der Pufferspeicher",
+                    "amount_of_solar": "Anzahl der Solarthermieanlagen",
+                    "amount_of_heat_circuits": "Anzahl der Heizkreise"
                 }
             },
             "reauth_confirm": {
-                "title": "Lambda Wärmepumpen - Reauthentifizierung",
+                "title": "Lambda Wärmepumpe neu einrichten",
                 "description": "Ihr Konto kann nicht authentifiziert werden. Klicken Sie auf Senden, um die Einrichtung erneut durchzuführen."
             }
         },

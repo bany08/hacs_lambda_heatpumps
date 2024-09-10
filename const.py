@@ -14,6 +14,11 @@ CONF_MODBUS_HOST = "modbus_host"
 CONF_MODBUS_PORT = "modbus_port"
 CONF_SLAVE_ID = "slave_id"
 CONF_MODEL = "model"
+CONF_AMOUNT_OF_HEATPUMPS = "amount_of_heatpumps"
+CONF_AMOUNT_OF_BOILERS = "amount_of_boilers"
+CONF_AMOUNT_OF_BUFFERS = "amount_of_buffers"
+CONF_AMOUNT_OF_SOLAR = "amount_of_solar"
+CONF_AMOUNT_OF_HEAT_CIRCUITS = "amount_of_heat_circuits"
 
 DEFAULT_PORT = 502
 DEFAULT_SLAVE_ID = 1

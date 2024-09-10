@@ -11,7 +11,7 @@ from .const import *
 _LOGGER = logging.getLogger(__name__)
 
 class LambdaBaseSensor(SensorEntity):
-    def __init__(self, name, host, port, client, slave, register, language="en", config_entry_id=None):
+    def __init__(self, name, host, port, client, slave, register, model, language="en", config_entry_id=None):
         self._name = name
         self._host = host
         self._port = port
@@ -21,6 +21,7 @@ class LambdaBaseSensor(SensorEntity):
         self._state = None
         self._language = language
         self._config_entry_id = config_entry_id
+        self._model = model
         self._hass = None
 
     async def async_added_to_hass(self):
@@ -28,7 +29,7 @@ class LambdaBaseSensor(SensorEntity):
 
     @property
     def name(self):
-        return self._name
+        return f"lambda_{self._name}"
 
     @property
     def state(self):
@@ -44,7 +45,7 @@ class LambdaBaseSensor(SensorEntity):
             "identifiers": {(DOMAIN, self._config_entry_id)},
             "name": "Lambda Wärmepumpe",
             "manufacturer": MANUFACTURER,
-            "model": "Wärmepumpenmodell",
+            "model": self._model,
         }
 
     async def async_update(self):
@@ -69,8 +70,8 @@ class LambdaErrorSensor(LambdaBaseSensor):
         return "mdi:alert-circle-outline"
 
 class LambdaStateSensor(LambdaBaseSensor):
-    def __init__(self, name, host, port, client, slave, register, states, config_entry_id=None):
-        super().__init__(name, host, port, client, slave, register, config_entry_id)
+    def __init__(self, name, host, port, client, slave, register, model, states, language="en", config_entry_id=None):
+        super().__init__(name, host, port, client, slave, register, model, language, config_entry_id)
         self._states = states
 
     @property
@@ -84,8 +85,8 @@ class LambdaStateSensor(LambdaBaseSensor):
         return "mdi:state-machine"
 
 class LambdaTemperaturSensor(LambdaBaseSensor):
-    def __init__(self, name, host, port, client, slave, register, factor, language="en", config_entry_id=None):
-        super().__init__(name, host, port, client, slave, register, language, config_entry_id)
+    def __init__(self, name, host, port, client, slave, register, model, factor, language="en", config_entry_id=None):
+        super().__init__(name, host, port, client, slave, register, model, language, config_entry_id)
         self._factor = factor
 
     @property
@@ -103,8 +104,8 @@ class LambdaTemperaturSensor(LambdaBaseSensor):
         return "mdi:thermometer"
 
 class LambdaPowerSensor(LambdaBaseSensor):
-    def __init__(self, name, host, port, client, slave, register, factor=1, unit="W", language="en", config_entry_id=None):
-        super().__init__(name, host, port, client, slave, register, language, config_entry_id)
+    def __init__(self, name, host, port, client, slave, register, model, factor=1, unit="W", language="en", config_entry_id=None):
+        super().__init__(name, host, port, client, slave, register, model, language, config_entry_id)
         self._factor = factor
         self._unit = unit
 
@@ -123,8 +124,8 @@ class LambdaPowerSensor(LambdaBaseSensor):
         return "mdi:flash"
 
 class LambdaFlowSensor(LambdaBaseSensor):
-    def __init__(self, name, host, port, client, slave, register, factor, language="en", config_entry_id=None):
-        super().__init__(name, host, port, client, slave, register, language, config_entry_id)
+    def __init__(self, name, host, port, client, slave, register, model, factor, language="en", config_entry_id=None):
+        super().__init__(name, host, port, client, slave, register, model, language, config_entry_id)
         self._factor = factor
 
     @property
@@ -142,8 +143,8 @@ class LambdaFlowSensor(LambdaBaseSensor):
         return "mdi:pump"
 
 class LambdaPercentageSensor(LambdaBaseSensor):
-    def __init__(self, name, host, port, client, slave, register, factor, language="en", config_entry_id=None):
-        super().__init__(name, host, port, client, slave, register, language, config_entry_id)
+    def __init__(self, name, host, port, client, slave, register, model, factor, language="en", config_entry_id=None):
+        super().__init__(name, host, port, client, slave, register, model, language, config_entry_id)
         self._factor = factor
 
     @property
@@ -168,28 +169,37 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigType, async_add_en
     port = entry.data[CONF_MODBUS_PORT]
     slave = entry.data[CONF_SLAVE_ID]
     language = hass.config.language
-
+    model = entry.data["model"]
+        
+    extra_info = {
+        "amount_of_heatpumps": entry.data.get("heat_pumps", 1),
+        "amount_of_boilers": entry.data.get("boilers", 1),
+        "amount_of_buffers": entry.data.get("buffers", 1),
+        "amount_of_solar": entry.data.get("solar", 1),
+        "amount_of_heat_circuits": entry.data.get("heat_circuits", 1),
+    }
+    
     client = ModbusTcpClient(host=host, port=port)
     
  # Sensoren in inhaltliche Sektionen aufteilen
     generell_sensors = [
-        LambdaErrorSensor("Fehler Nummer", host, port, client, slave, REGISTER_ERROR_NUMBER, config_entry_id=entry.entry_id),        
-        LambdaStateSensor("Betriebszustand", host, port, client, slave, REGISTER_OPERATING_STATE, get_operating_states(), config_entry_id=entry.entry_id)
+        LambdaErrorSensor("Fehler Nummer", host, port, client, slave, REGISTER_ERROR_NUMBER, model,config_entry_id=entry.entry_id),        
+        LambdaStateSensor("Betriebszustand", host, port, client, slave, REGISTER_OPERATING_STATE, model, get_operating_states(), config_entry_id=entry.entry_id)
     ]
 
     energiemanager_sensors = [
-        LambdaErrorSensor("E-Manager Fehlernummer", host, port, client, slave, REGISTER_EMANAGER_ERROR_NUMBER, config_entry_id=entry.entry_id)
+        LambdaErrorSensor("E-Manager Fehlernummer", host, port, client, slave, REGISTER_EMANAGER_ERROR_NUMBER, model, config_entry_id=entry.entry_id)
     ]
 
     brauchwasser_sensors = [
-        LambdaTemperaturSensor("Aktuelle Umgebungstemperatur", host, port, client, slave, REGISTER_ACTUAL_AMBIENT_TEMP, 0.1, config_entry_id=entry.entry_id),
-        LambdaTemperaturSensor("Durchschnittliche Umgebungstemperatur 1h", host, port, client, slave, REGISTER_AVERAGE_AMBIENT_TEMP, 0.1, config_entry_id=entry.entry_id),
-        LambdaTemperaturSensor("Berechnete Umgebungstemperatur", host, port, client, slave, REGISTER_CALCULATED_AMBIENT_TEMP, 0.1, config_entry_id=entry.entry_id)
+        LambdaTemperaturSensor("Aktuelle Umgebungstemperatur", host, port, client, slave, REGISTER_ACTUAL_AMBIENT_TEMP, model, 0.1, config_entry_id=entry.entry_id),
+        LambdaTemperaturSensor("Durchschnittliche Umgebungstemperatur 1h", host, port, client, slave, REGISTER_AVERAGE_AMBIENT_TEMP, model, 0.1, config_entry_id=entry.entry_id),
+        LambdaTemperaturSensor("Berechnete Umgebungstemperatur", host, port, client, slave, REGISTER_CALCULATED_AMBIENT_TEMP, model, 0.1, config_entry_id=entry.entry_id)
     ]
 
     heizung_sensors = [
-        LambdaFlowSensor("Kühlkörper Volumenstrom", host, port, client, slave, REGISTER_HP1_VOL_SINK, 0.01, config_entry_id=entry.entry_id),
-        LambdaPercentageSensor("COP", host, port, client, slave, REGISTER_COP, 0.01, config_entry_id=entry.entry_id)
+        LambdaFlowSensor("Kühlkörper Volumenstrom", host, port, client, slave, REGISTER_HP1_VOL_SINK, model, 0.01, config_entry_id=entry.entry_id),
+        LambdaPercentageSensor("COP", host, port, client, slave, REGISTER_COP, model, 0.01, config_entry_id=entry.entry_id)
     ]
 
     # Alle Sensoren zusammenführen

@@ -1,10 +1,14 @@
+import logging
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.translation import async_get_translations
 from pymodbus.client import ModbusTcpClient
 
-from .const import DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CONF_SLAVE_ID, CONF_MODEL
+from .const import MANUFACTURER, DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CONF_SLAVE_ID, CONF_MODEL
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
@@ -17,9 +21,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][entry.entry_id] = entry.data
 
     # Forward the setup to the sensor platform
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor")
-    )
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
 
     # Read the software version from Modbus
     client = ModbusTcpClient(
@@ -38,11 +40,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Add device registry information
     device_registry = dr.async_get(hass)
+
+    language = hass.config.language
+    translations = await async_get_translations(hass, language, "lambda_heatpumps")
+    # name = translations.get("device_name", "Lambda Heatpump 123")
+    name = translations.get("device_name", "Lambda Heatpump")
+
     device_registry.async_get_or_create(
         config_entry_id=entry.entry_id,
         identifiers={(DOMAIN, entry.entry_id)},
-        name="Lambda Heatpump",
-        manufacturer="Lambda",
+        name=name,
+        manufacturer=MANUFACTURER,
         model=entry.data[CONF_MODEL],
         #sw_version=str(sw_version)
     )
