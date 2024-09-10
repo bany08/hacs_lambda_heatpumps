@@ -1,0 +1,97 @@
+import logging
+import voluptuous as vol
+from homeassistant import config_entries
+from homeassistant.core import HomeAssistant
+from homeassistant.data_entry_flow import FlowResult
+from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers.translation import async_get_translations
+from homeassistant.components.persistent_notification import create as persistent_notification_create
+from pymodbus.client import ModbusTcpClient
+from pymodbus.exceptions import ConnectionException
+
+from .const import DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CONF_SLAVE_ID, DEFAULT_PORT, DEFAULT_SLAVE_ID
+
+class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    VERSION = 1
+
+    def __init__(self):
+        self._logger = logging.getLogger(__name__)
+
+    async def async_step_user(self, user_input=None) -> FlowResult:
+        errors = {}
+        if user_input is not None:
+            try:
+                self._logger.debug("Benutzereingaben: %s", user_input)
+                client = ModbusTcpClient(
+                    host=user_input[CONF_MODBUS_HOST],
+                    port=user_input[CONF_MODBUS_PORT]
+                )
+                if not client.connect():
+                    self._logger.error("Verbindung zum Modbus-Client fehlgeschlagen")
+                    errors["base"] = "cannot_connect"
+                else:
+                    self._logger.debug("Verbindung zum Modbus-Client hergestellt")
+                    # Versuchen Sie, ein spezifisches Register der Lambda Wärmepumpe zu lesen
+                    result = client.read_holding_registers(100, 1, unit=user_input[CONF_SLAVE_ID])
+                    if result.isError():
+                        self._logger.error("Fehler beim Lesen des Modbus-Registers")
+                        errors["base"] = "invalid_slave_id"
+                    else:
+                        self._logger.debug("Modbus-Register erfolgreich gelesen: %s", result.registers[0])
+                        await self.async_set_unique_id(f"{user_input[CONF_MODBUS_HOST]}:{user_input[CONF_MODBUS_PORT]}")
+                        language = self.hass.config.language
+                        translations = await async_get_translations(self.hass, language, "lambda_heatpumps")
+                        title = f"{translations.get('title', 'Lambda Heatpumps')} {user_input['model']}"
+                        description = translations.get('config.success.description', "Configuration for {device_model} created.\n\nFollowing devices were found:\n\n{device_name}\n{model} ({manufacturer})\nArea")
+                        persistent_notification_create(
+                            self.hass,
+                            description.format(
+                                model=user_input['model'],
+                                device_name=translations.get('config.device_name', 'Lambda Heatpump'),
+                                device_model=user_input['model'],
+                                manufacturer=translations.get('config.manufacturer', 'LAMBDA Wärmepumpen GmbH')
+                            ),
+                            title=translations.get('config.success.title', 'Success!')
+                        )
+                        return self.async_create_entry(
+                            title=title,
+                            data={
+                                CONF_MODBUS_HOST: user_input[CONF_MODBUS_HOST],
+                                CONF_MODBUS_PORT: user_input[CONF_MODBUS_PORT],
+                                CONF_SLAVE_ID: user_input[CONF_SLAVE_ID],
+                                "model": user_input["model"]
+                            }
+                        )
+            except ConnectionException:
+                self._logger.error("ConnectionException aufgetreten")
+                errors["base"] = "cannot_connect"
+            except Exception as e:
+                self._logger.error(f"Unerwarteter Fehler: {e}")
+            finally:
+                client.close()
+
+        # Lade Übersetzungen
+        language = self.hass.config.language
+        translations = await async_get_translations(self.hass, language, "lambda_heatpumps")
+
+        # Definiere das Dropdown-Menü für das Modell
+        model_options = ["EU8L", "EU13L", "EU15L", "EU20L"]
+
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_MODBUS_HOST): str,
+                    vol.Required(CONF_MODBUS_PORT, default=DEFAULT_PORT): int,
+                    vol.Required(CONF_SLAVE_ID, default=DEFAULT_SLAVE_ID): int,
+                    vol.Required("model"): vol.In(model_options)
+                }
+            ),
+            description_placeholders={
+                "modbus_host": translations.get("config.step.user.data.modbus_host", "Modbus Host"),
+                "modbus_port": translations.get("config.step.user.data.modbus_port", "Modbus Port"),
+                "slave_id": translations.get("config.step.user.data.slave_id", "Slave ID"),
+                "model": translations.get("config.step.user.data.model", "Model")
+            },
+            errors=errors,
+        )

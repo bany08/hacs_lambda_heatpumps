@@ -1,0 +1,13 @@
+{
+    "domain": "lambda_heatpumps",
+    "name": "Lambda Heatpump Integration",
+    "documentation": "https://github.com/bany08/hacs_lambda_heatpumps",
+    "issue_tracker": "https://github.com/bany08/hacs_lambda_heatpumps/issues",
+    "dependencies": ["modbus"],
+    "codeowners": ["@bany08"],
+    "requirements": ["pymodbus"],
+    "config_flow": true,
+    "iot_class": "local_polling",
+    "integration_type": "device",
+    "version": "0.1.0"
+}

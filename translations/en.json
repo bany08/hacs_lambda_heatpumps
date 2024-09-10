@@ -1,0 +1,43 @@
+{
+    "title": "Lambda Heatpumps",
+    "config": {
+        "step": {
+            "init": {
+                "title": "Lambda Heatpumps - Authentication",
+                "description": "Set up your Lambda Heatpumps to integrate with Home Assistant.",
+                "data": {
+                    "modbus_host": "Modbus Host",
+                    "modbus_port": "Modbus Port",
+                    "slave_id": "Slave ID",
+                    "model": "Model"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Lambda Heatpumps - Reauthentication",
+                "description": "Your account is unable to authenticate. Click Submit to re-setup."
+            }
+        },
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Cannot connect to the device.",
+            "invalid_slave_id": "Invalid Slave ID.",
+            "unknown_error": "Unexpected error occurred."
+        },
+        "success": {
+            "title": "Success!",
+            "description": "Configuration for {device_model} created.\n\nFollowing devices were found:\n\n{device_name}\n{model} ({manufacturer})\nArea"
+        },
+        "device_name": "Lambda Heatpump",
+        "device_model": "Heatpump Model",
+        "manufacturer": "LAMBDA Wärmepumpen GmbH"
+    },
+    "operating_states": {
+        "OFF": "off",
+        "AUTOMATIC": "automatic",
+        "MANUAL": "manual",
+        "ERROR": "Error"
+        
+    }
+}

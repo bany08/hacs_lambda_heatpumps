@@ -1,0 +1,43 @@
+{
+    "title": "Lambda Wärmepumpen",
+    "config": {
+        "step": {
+            "user": {
+                "title": "Lambda Wärmepumpen - Authentifizierung",
+                "description": "Richten Sie Ihre Lambda Wärmepumpen ein, um sie in Home Assistant zu integrieren.",
+                "data": {
+                    "modbus_host": "Modbus Host",
+                    "modbus_port": "Modbus Port",
+                    "slave_id": "Slave ID",
+                    "model": "Modell"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Lambda Wärmepumpen - Reauthentifizierung",
+                "description": "Ihr Konto kann nicht authentifiziert werden. Klicken Sie auf Senden, um die Einrichtung erneut durchzuführen."
+            }
+        },
+        "abort": {
+            "already_configured": "Gerät ist bereits konfiguriert."
+        },
+        "error": {
+            "cannot_connect": "Kann keine Verbindung zum Gerät herstellen.",
+            "invalid_slave_id": "Ungültige Slave-ID.",
+            "unknown_error": "Unerwarteter Fehler aufgetreten."
+        },
+        "success": {
+            "title": "Erfolg!",
+            "description": "Konfiguration für {device_model} erstellt.\n\nFolgende Geräte wurden gefunden:\n\n{device_name}\n{model} ({manufacturer})\nBereich"
+        },
+        "device_name": "Lambda Wärmepumpe",
+        "device_model": "Wärmepumpenmodell",
+        "manufacturer": "LAMBDA Wärmepumpen GmbH"
+    },
+    "operating_states": {
+        "OFF": "aus",
+        "AUTOMATIK": "automatisch",
+        "MANUAL": "manuell",
+        "ERROR": "Fehler"
+        
+    }
+}
