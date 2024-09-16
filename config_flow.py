@@ -11,6 +11,8 @@ from pymodbus.exceptions import ConnectionException
 
 from .const import DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CONF_SLAVE_ID, DEFAULT_PORT, DEFAULT_SLAVE_ID, CONF_MODEL, CONF_AMOUNT_OF_HEATPUMPS, CONF_AMOUNT_OF_BOILERS, CONF_AMOUNT_OF_BUFFERS, CONF_AMOUNT_OF_SOLAR, CONF_AMOUNT_OF_HEAT_CIRCUITS
 
+_LOGGER = logging.getLogger(__name__)
+
 class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
@@ -41,6 +43,7 @@ class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         await self.async_set_unique_id(f"{user_input[CONF_MODBUS_HOST]}:{user_input[CONF_MODBUS_PORT]}")
                         language = self.hass.config.language
                         translations = await async_get_translations(self.hass, language, "lambda_heatpumps")
+                        _LOGGER.debug(f"Translations: {translations}")
                         title = f"{translations.get('title', 'Lambda Heatpumps')} {user_input['model']}"
                         description = translations.get('config.success.description', "Configuration for {device_model} created.\n\nFollowing devices were found:\n\n{device_name}\n{model} ({manufacturer})\nArea")
                         persistent_notification_create(
