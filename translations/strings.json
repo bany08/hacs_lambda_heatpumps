@@ -48,8 +48,7 @@
             "no_response": "No response from the device.",
             "timeout": "Timeout fetching data from the device."
         }
-    },
-    
+    },    
     "operating_states": {
         "OFF": "off",
         "AUTOMATIC": "automatic",
@@ -76,7 +75,7 @@
             },
             "heatpump_1_state": {
                 "name": "WP 1: State"
-            }        
+            }
         }
     }
 }

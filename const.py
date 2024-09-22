@@ -35,338 +35,730 @@ DEFAULT_SLAVE_ID = 1
 # - Solar (ModulNr. 1-2)
 
 
-# General Ambient
-GENERAL_AMBIENT_ERROR_NUMBER = 0
-GENERAL_AMBIENT_OPERATING_STATE = 1
-GENERAL_AMBIENT_ACTUAL_AMBIENT_TEMP = 2
-GENERAL_AMBIENT_AVERAGE_AMBIENT_TEMP_1H = 3
-GENERAL_AMBIENT_CALCULATED_AMBIENT_TEMP = 4
 
-# General E-Manager
-E_MANAGER_ERROR_NUMBER = 100
-E_MANAGER_OPERATING_STATE = 101
-E_MANAGER_ACTUAL_POWER_INPUT_OR_EXCESS = 102
-E_MANAGER_ACTUAL_POWER_CONSUMPTION = 103
-E_MANAGER_POWER_CONSUMPTION_SETPOINT = 104
+SENSOR_CONFIG = [
+    # General Ambient
+    {
+        "bereich": "general_ambient",
+        "name": "general_ambient_error_number",
+        "register": 0,
+        "type": "LambdaErrorSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "general_ambient",
+        "name": "general_ambient_operating_state",
+        "register": 1,
+        "type": "LambdaStateSensor",
+        "states_function": "get_operating_states",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "general_ambient",
+        "name": "general_ambient_actual_ambient_temp",
+        "register": 2,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "general_ambient",
+        "name": "general_ambient_average_ambient_temp_1h",
+        "register": 3,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "general_ambient",
+        "name": "general_ambient_calculated_ambient_temp",
+        "register": 4,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
 
-# Heatpump 1
-HEATPUMP_1_ERROR_STATE = 1000
-HEATPUMP_1_ERROR_NUMBER = 1001
-HEATPUMP_1_STATE = 1002
-HEATPUMP_1_OPERATING_STATE = 1003
-HEATPUMP_1_FLOWLINE_TEMP = 1004
-HEATPUMP_1_RETURNLINE_TEMP = 1005
-HEATPUMP_1_VOLUME_FLOW_HEAT_SINK = 1006
-HEATPUMP_1_ENERGY_SOURCE_INLET_TEMPERATURE = 1007
-HEATPUMP_1_ENERGY_SOURCE_OUTLET_TEMPERATURE = 1008
-HEATPUMP_1_VOLUME_FLOW_ENERGY_SOURCE = 1009
-HEATPUMP_1_COMPRESSOR_UNIT_RATING = 1010
-HEATPUMP_1_ACTUAL_HEATING_CAPACITY = 1011
-HEATPUMP_1_FREQUENCY_INVERTER_ACTUAL_POWER_CONSUMPTION = 1012
-HEATPUMP_1_COEFFICIENT_OF_PERFORMANCE = 1013
-HEATPUMP_1_PASSWORD_REGISTER = 1014
-HEATPUMP_1_REQUEST_TYPE = 1015
-HEATPUMP_1_REQUEST_FLOW_LINE_TEMP = 1016
-HEATPUMP_1_REQUEST_RETURN_LINE_TEMP = 1017
-HEATPUMP_1_REQUEST_HEAT_SINK_TEMP_DIFF = 1018
-HEATPUMP_1_RELAIS_STATE_2ND_HEATING_STAGE = 1019
-HEATPUMP_1_ACCUMULATED_ELECTRICAL_ENERGY_CONSUMPTION_OF_COMPRESSOR_UNIT = 1020
-HEATPUMP_1_ACCUMULATED_THERMAL_ENERGY_OUTPUT_OF_COMPRESSOR_UNIT = 1021
-HEATPUMP_1_QUIT_ALL_ACTIVE_HEAT_PUMP_ERRORS = 1050
+    # E-Manager
+    {
+        "bereich": "e_manager",
+        "name": "e_manager_error_number",
+        "register": 100,
+        "type": "LambdaErrorSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "e_manager",
+        "name": "e_manager_operating_state",
+        "register": 101,
+        "type": "LambdaStateSensor",
+        "states_function": "get_operating_states",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "e_manager",
+        "name": "e_manager_actual_power_input",
+        "register": 102,
+        "type": "LambdaPowerSensor",
+        "factor": 1,
+        "unit_of_measurement": "W",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "e_manager",
+        "name": "e_manager_actual_power_consumption",
+        "register": 103,
+        "type": "LambdaPowerSensor",
+        "factor": 1,
+        "unit_of_measurement": "W",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "e_manager",
+        "name": "e_manager_power_consumption_setpoint",
+        "register": 104,
+        "type": "LambdaPowerSensor",
+        "factor": 1,
+        "unit_of_measurement": "W",
+        "data_format": "int16"
+    },
 
-# Heatpump 2
-HEATPUMP_2_ERROR_STATE = 1100
-HEATPUMP_2_ERROR_NUMBER = 1101
-HEATPUMP_2_STATE = 1102
-HEATPUMP_2_OPERATING_STATE = 1103
-HEATPUMP_2_FLOWLINE_TEMP = 1104
-HEATPUMP_2_RETURNLINE_TEMP = 1105
-HEATPUMP_2_VOLUME_FLOW_HEAT_SINK = 1106
-HEATPUMP_2_ENERGY_SOURCE_INLET_TEMPERATURE = 1107
-HEATPUMP_2_ENERGY_SOURCE_OUTLET_TEMPERATURE = 1108
-HEATPUMP_2_VOLUME_FLOW_ENERGY_SOURCE = 1109
-HEATPUMP_2_COMPRESSOR_UNIT_RATING = 1110
-HEATPUMP_2_ACTUAL_HEATING_CAPACITY = 1111
-HEATPUMP_2_FREQUENCY_INVERTER_ACTUAL_POWER_CONSUMPTION = 1112
-HEATPUMP_2_COEFFICIENT_OF_PERFORMANCE = 1113
-HEATPUMP_2_PASSWORD_REGISTER = 1114
-HEATPUMP_2_REQUEST_TYPE = 1115
-HEATPUMP_2_REQUEST_FLOW_LINE_TEMP = 1116
-HEATPUMP_2_REQUEST_RETURN_LINE_TEMP = 1117
-HEATPUMP_2_REQUEST_HEAT_SINK_TEMP_DIFF = 1118
-HEATPUMP_2_RELAIS_STATE_2ND_HEATING_STAGE = 1119
-HEATPUMP_2_ACCUMULATED_ELECTRICAL_ENERGY_CONSUMPTION_OF_COMPRESSOR_UNIT = 1120
-HEATPUMP_2_ACCUMULATED_THERMAL_ENERGY_OUTPUT_OF_COMPRESSOR_UNIT = 1121
-HEATPUMP_2_QUIT_ALL_ACTIVE_HEAT_PUMP_ERRORS = 1150
+    # Heatpump 1
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_error_state",
+        "register": 1000,
+        "type": "LambdaStateSensor",
+        "states_function": "get_hp_error_states"   ,
+        "data_format": "uint16"     
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_error_number",
+        "register": 1001,
+        "type": "LambdaErrorSensor"  ,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_state",
+        "register": 1002,
+        "type": "LambdaStateSensor",
+        "states_function": "get_hp_states"   ,
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_operating_state",
+        "register": 1003,
+        "type": "LambdaStateSensor",
+        "states_function": "get_hp_operation_states"   ,
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_flowline_temp",
+        "register": 1004,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.01,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_returnline_temp",
+        "register": 1005,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.01,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_flow_heat_sink",
+        "register": 1006,
+        "type": "LambdaFlowSensor",
+        "factor": 0.01,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_energy_source_inlet_temperature",
+        "register": 1007,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_energy_source_outlet_temperature",
+        "register": 1008,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {   
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_volume_flow_energy_source",
+        "register": 1009,
+        "type": "LambdaFlowSensor",
+        "factor": 0.01,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_compressor_unit_rating",
+        "register": 1010,
+        "type": "LambdaPercentageSensor",
+        "factor": 0.01,
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_actual_heating_capacity",
+        "register": 1011,
+        "type": "LambdaPowerSensor",
+        "factor": 0.01,
+        "unit_of_measurement": "kW",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_frequency_inverter_actual_power_consumption",
+        "register": 1012,
+        "type": "LambdaPowerSensor",
+        "factor": 1,
+        "unit_of_measurement": "W",
+        "data_format": "int16"
+    },
 
-# Heatpump 3
-HEATPUMP_3_ERROR_STATE = 1200
-HEATPUMP_3_ERROR_NUMBER = 1201
-HEATPUMP_3_STATE = 1202
-HEATPUMP_3_OPERATING_STATE = 1203
-HEATPUMP_3_FLOWLINE_TEMP = 1204
-HEATPUMP_3_RETURNLINE_TEMP = 1205
-HEATPUMP_3_VOLUME_FLOW_HEAT_SINK = 1206
-HEATPUMP_3_ENERGY_SOURCE_INLET_TEMPERATURE = 1207
-HEATPUMP_3_ENERGY_SOURCE_OUTLET_TEMPERATURE = 1208
-HEATPUMP_3_VOLUME_FLOW_ENERGY_SOURCE = 1209
-HEATPUMP_3_COMPRESSOR_UNIT_RATING = 1210
-HEATPUMP_3_ACTUAL_HEATING_CAPACITY = 1211
-HEATPUMP_3_FREQUENCY_INVERTER_ACTUAL_POWER_CONSUMPTION = 1212
-HEATPUMP_3_COEFFICIENT_OF_PERFORMANCE = 1213
-HEATPUMP_3_PASSWORD_REGISTER = 1214
-HEATPUMP_3_REQUEST_TYPE = 1215
-HEATPUMP_3_REQUEST_FLOW_LINE_TEMP = 1216
-HEATPUMP_3_REQUEST_RETURN_LINE_TEMP = 1217
-HEATPUMP_3_REQUEST_HEAT_SINK_TEMP_DIFF = 1218
-HEATPUMP_3_RELAIS_STATE_2ND_HEATING_STAGE = 1219
-HEATPUMP_3_ACCUMULATED_ELECTRICAL_ENERGY_CONSUMPTION_OF_COMPRESSOR_UNIT = 1220
-HEATPUMP_3_ACCUMULATED_THERMAL_ENERGY_OUTPUT_OF_COMPRESSOR_UNIT = 1221
-HEATPUMP_3_QUIT_ALL_ACTIVE_HEAT_PUMP_ERRORS = 1250
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_coefficient_of_performance",
+        "register": 1013,
+        "type": "LambdaPercentageSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_password_register_to_release_modbus_request_registers",
+        "register": 1014,
+        "type": "LambdaErrorSensor",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_request_type",
+        "register": 1015,
+        "type": "LambdaStateSensor",
+        "states_function": "get_hp_request_types",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_requested_flow_line_temperature",
+        "register": 1016,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 0.0,
+        "max": 70.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_requested_return_line_temperature",
+        "register": 1017,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 0.0,
+        "max": 65.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_requested_temperature_difference_between_flow_line_and_return_line",
+        "register": 1018,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "K",
+        "min": 0.0,
+        "max": 35.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_relais_state_for_2nd_heating_stage",
+        "register": 1019,
+        "type": "LambdaStateSensor",
+        "states_function": "get_hp_relais_states",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_accumulated_electrical_energy_consumption_of_compressor_unit",
+        "register": 1020,
+        "type": "LambdaEnergySensor",
+        "factor": 1,
+        "unit_of_measurement": "Wh",
+        "data_format": "int32"
+    },
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_accumulated_thermal_energy_output_of_compressor_unit",
+        "register": 1022,
+        "type": "LambdaEnergySensor",
+        "factor": 1,
+        "unit_of_measurement": "Wh",
+        "data_format": "int32"
+    },
 
-# Boiler 1
-BOILER_1_ERROR_NUMBER = 2000
-BOILER_1_OPERATING_STATE = 2001
-BOILER_1_ACTUAL_TEMPERATURE_BOILER_HIGH_SENSOR = 2002
-BOILER_1_ACTUAL_TEMPERATURE_BOILER_LOW_SENSOR = 2003
-BOILER_1_SETTING_FOR_MAXIMUM_BOILER_TEMPERATURE = 2050
-
-# Boiler 2
-BOILER_2_ERROR_NUMBER = 2100
-BOILER_2_OPERATING_STATE = 2101
-BOILER_2_ACTUAL_TEMPERATURE_BOILER_HIGH_SENSOR = 2102
-BOILER_2_ACTUAL_TEMPERATURE_BOILER_LOW_SENSOR = 2103
-BOILER_2_SETTING_FOR_MAXIMUM_BOILER_TEMPERATURE = 2150
-
-# Boiler 3
-BOILER_3_ERROR_NUMBER = 2200        
-BOILER_3_OPERATING_STATE = 2201
-BOILER_3_ACTUAL_TEMPERATURE_BOILER_HIGH_SENSOR = 2202
-BOILER_3_ACTUAL_TEMPERATURE_BOILER_LOW_SENSOR = 2203
-BOILER_3_SETTING_FOR_MAXIMUM_BOILER_TEMPERATURE = 2250 
-
-# Boiler 4
-BOILER_4_ERROR_NUMBER = 2300
-BOILER_4_OPERATING_STATE = 2301
-BOILER_4_ACTUAL_TEMPERATURE_BOILER_HIGH_SENSOR = 2302
-BOILER_4_ACTUAL_TEMPERATURE_BOILER_LOW_SENSOR = 2303
-BOILER_4_SETTING_FOR_MAXIMUM_BOILER_TEMPERATURE = 2350
-
-# Boiler 5
-BOILER_5_ERROR_NUMBER = 2400
-BOILER_5_OPERATING_STATE = 2401
-BOILER_5_ACTUAL_TEMPERATURE_BOILER_HIGH_SENSOR = 2402
-BOILER_5_ACTUAL_TEMPERATURE_BOILER_LOW_SENSOR = 2403
-BOILER_5_SETTING_FOR_MAXIMUM_BOILER_TEMPERATURE = 2450
-
-# Buffer 1
-BUFFER_1_ERROR_NUMBER = 3000
-BUFFER_1_OPERATING_STATE = 3001
-BUFFER_1_ACTUAL_TEMPERATURE_BUFFER_HIGH_SENSOR = 3002
-BUFFER_1_ACTUAL_TEMPERATURE_BUFFER_LOW_SENSOR = 3003
-BUFFER_1_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 3050
-
-# Buffer 2
-BUFFER_2_ERROR_NUMBER = 3100
-BUFFER_2_OPERATING_STATE = 3101
-BUFFER_2_ACTUAL_TEMPERATURE_BUFFER_HIGH_SENSOR = 3102
-BUFFER_2_ACTUAL_TEMPERATURE_BUFFER_LOW_SENSOR = 3103
-BUFFER_2_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 3150
-
-# Buffer 3
-BUFFER_3_ERROR_NUMBER = 3200
-BUFFER_3_OPERATING_STATE = 3201
-BUFFER_3_ACTUAL_TEMPERATURE_BUFFER_HIGH_SENSOR = 3202
-BUFFER_3_ACTUAL_TEMPERATURE_BUFFER_LOW_SENSOR = 3203
-BUFFER_3_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 3250
-
-# Buffer 4
-BUFFER_4_ERROR_NUMBER = 3300
-BUFFER_4_OPERATING_STATE = 3301
-BUFFER_4_ACTUAL_TEMPERATURE_BUFFER_HIGH_SENSOR = 3302
-BUFFER_4_ACTUAL_TEMPERATURE_BUFFER_LOW_SENSOR = 3303
-BUFFER_4_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 3350
-
-# Buffer 5
-BUFFER_5_ERROR_NUMBER = 3400
-BUFFER_5_OPERATING_STATE = 3401
-BUFFER_5_ACTUAL_TEMPERATURE_BUFFER_HIGH_SENSOR = 3402
-BUFFER_5_ACTUAL_TEMPERATURE_BUFFER_LOW_SENSOR = 3403
-BUFFER_5_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 3450
-
-# Solar 1
-SOLAR_1_ERROR_NUMBER = 4000
-SOLAR_1_OPERATING_STATE = 4001
-SOLAR_1_COLLECTOR_TEMP = 4002
-SOLAR_1_BUFFER_1_TEMP = 4003
-SOLAR_1_BUFFER_2_TEMP = 4004
-SOLAR_1_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 4050
-SOLAR_1_SETTING_FOR_BUFFER_CHANGEOVER_TEMPERATURE = 4051
-
-# Solar 2
-SOLAR_2_ERROR_NUMBER = 4100 
-SOLAR_2_OPERATING_STATE = 4101
-SOLAR_2_COLLECTOR_TEMP = 4102
-SOLAR_2_BUFFER_1_TEMP = 4104
-SOLAR_2_BUFFER_2_TEMP = 4105
-SOLAR_2_SETTING_FOR_MAXIMUM_BUFFER_TEMPERATURE = 4150
-SOLAR_2_SETTING_FOR_BUFFER_CHANGEOVER_TEMPERATURE = 4151
-
-# Heating Circuit 1
-HEATING_CIRCUIT_1_ERROR_NUMBER = 5000
-HEATING_CIRCUIT_1_OPERATING_STATE = 5001
-HEATING_CIRCUIT_1_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5002
-HEATING_CIRCUIT_1_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5003
-HEATING_CIRCUIT_1_ACTUAL_TEMPERATURE_ROOM_DEVICE_SENSOR = 5004
-HEATING_CIRCUIT_1_SETPOINT_TEMPERATURE_FLOW_LINE = 5005
-HEATING_CIRCUIT_1_OPERATING_MODE = 5006
-HEATING_CIRCUIT_1_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5050
-HEATING_CIRCUIT_1_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5051
-HEATING_CIRCUIT_1_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5052
-
-# Heating Circuit 2
-HEATING_CIRCUIT_2_ERROR_NUMBER = 5100
-HEATING_CIRCUIT_2_OPERATING_STATE = 5101
-HEATING_CIRCUIT_2_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5102
-HEATING_CIRCUIT_2_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5103
-HEATING_CIRCUIT_2_ACTUAL_TEMPERATURE_ROOM_DEVICE_SENSOR = 5104
-HEATING_CIRCUIT_2_SETPOINT_TEMPERATURE_FLOW_LINE = 5105
-HEATING_CIRCUIT_2_OPERATING_MODE = 5106
-HEATING_CIRCUIT_2_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5150
-HEATING_CIRCUIT_2_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5151
-HEATING_CIRCUIT_2_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5152
-
-# Heating Circuit 3
-HEATING_CIRCUIT_3_ERROR_NUMBER = 5200
-HEATING_CIRCUIT_3_OPERATING_STATE = 5201
-HEATING_CIRCUIT_3_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5202
-HEATING_CIRCUIT_3_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5203
-HEATING_CIRCUIT_3_ACTUAL_TEMPERATURE_ROOM_DEVICE_SENSOR = 5204
-HEATING_CIRCUIT_3_SETPOINT_TEMPERATURE_FLOW_LINE = 5205
-HEATING_CIRCUIT_3_OPERATING_MODE = 5206
-HEATING_CIRCUIT_3_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5250
-HEATING_CIRCUIT_3_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5251
-HEATING_CIRCUIT_3_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5252
-
-# Heating Circuit 4
-HEATING_CIRCUIT_4_ERROR_NUMBER = 5300
-HEATING_CIRCUIT_4_OPERATING_STATE = 5301
-HEATING_CIRCUIT_4_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5302
-HEATING_CIRCUIT_4_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5303
-HEATING_CIRCUIT_4_ACTUAL_TEMPERATURE_ROOM_DEVICE_SENSOR = 5304
-HEATING_CIRCUIT_4_SETPOINT_TEMPERATURE_FLOW_LINE = 5305
-HEATING_CIRCUIT_4_OPERATING_MODE = 5306
-HEATING_CIRCUIT_4_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5350
-HEATING_CIRCUIT_4_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5351
-HEATING_CIRCUIT_4_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5352
-
-# Heating Circuit 5
-HEATING_CIRCUIT_5_ERROR_NUMBER = 5400
-HEATING_CIRCUIT_5_OPERATING_STATE = 5401
-HEATING_CIRCUIT_5_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5402
-HEATING_CIRCUIT_5_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5403
-HEATING_CIRCUIT_5_SETPOINT_TEMPERATURE_FLOW_LINE = 5404
-HEATING_CIRCUIT_5_OPERATING_MODE = 5406
-HEATING_CIRCUIT_5_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5450
-HEATING_CIRCUIT_5_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5451
-HEATING_CIRCUIT_5_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5452
+    {
+        "bereich": "heatpump_1",
+        "name": "heatpump_1_quit_all_active_heat_pump_errors",
+        "register": 1050,
+        "type": "LambdaErrorSensor",
+        "data_format": "uint16"
+    },
 
 
-# Heating Circuit 6
-HEATING_CIRCUIT_6_ERROR_NUMBER = 5500
-HEATING_CIRCUIT_6_OPERATING_STATE = 5501
-HEATING_CIRCUIT_6_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5502
-HEATING_CIRCUIT_6_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5503
-HEATING_CIRCUIT_6_ACTUAL_TEMPERATURE_ROOM_DEVICE_SENSOR = 5504
-HEATING_CIRCUIT_6_SETPOINT_TEMPERATURE_FLOW_LINE = 5505
-HEATING_CIRCUIT_6_OPERATING_MODE = 5506
-HEATING_CIRCUIT_6_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5550
-HEATING_CIRCUIT_6_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5551
-HEATING_CIRCUIT_6_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5552
 
-# Heating Circuit 7
-HEATING_CIRCUIT_7_ERROR_NUMBER = 5600
-HEATING_CIRCUIT_7_OPERATING_STATE = 5601
-HEATING_CIRCUIT_7_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5602
-HEATING_CIRCUIT_7_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5603
-HEATING_CIRCUIT_7_SETPOINT_TEMPERATURE_FLOW_LINE = 5604
-HEATING_CIRCUIT_7_OPERATING_MODE = 5606
-HEATING_CIRCUIT_7_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5650
-HEATING_CIRCUIT_7_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5651
-HEATING_CIRCUIT_7_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5652
+    # Boiler 1
+    {
+        "bereich": "boiler_1",
+        "name": "boiler_1_error_number",
+        "register": 2000,
+        "type": "LambdaErrorSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "boiler_1",
+        "name": "boiler_1_operating_state",
+        "register": 2001,
+        "type": "LambdaStateSensor",
+        "states_function": "get_boiler_operating_states",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "boiler_1",
+        "name": "boiler_1_actual_temperature_boiler_high_sensor",
+        "register": 2002,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "boiler_1",
+        "name": "boiler_1_actual_temperature_boiler_low_sensor",
+        "register": 2003,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "boiler_1",
+        "name": "boiler_1_setting_for_maximum_boiler_temperature",
+        "register": 2050,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    
 
-# Heating Circuit 8
-HEATING_CIRCUIT_8_ERROR_NUMBER = 5700
-HEATING_CIRCUIT_8_OPERATING_STATE = 5701
-HEATING_CIRCUIT_8_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5702
-HEATING_CIRCUIT_8_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5703
-HEATING_CIRCUIT_8_SETPOINT_TEMPERATURE_FLOW_LINE = 5704
-HEATING_CIRCUIT_8_OPERATING_MODE = 5706
-HEATING_CIRCUIT_8_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5750
-HEATING_CIRCUIT_8_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5751
-HEATING_CIRCUIT_8_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5752
+    # Buffer 1
+    {
+        "bereich": "buffer_1",
+        "name": "buffer_1_error_number",
+        "register": 3000,
+        "type": "LambdaErrorSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "buffer_1",
+        "name": "buffer_1_operating_state",
+        "register": 3001,
+        "type": "LambdaStateSensor",
+        "states_function": "get_buffer_operating_states",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "buffer_1",
+        "name": "buffer_1_actual_temperature_buffer_high_sensor",
+        "register": 3002,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "buffer_1",
+        "name": "buffer_1_actual_temperature_buffer_low_sensor",
+        "register": 3003,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "buffer_1",
+        "name": "buffer_1_setting_for_maximum_buffer_temperature",
+        "register": 3050,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
 
-# Heating Circuit 9
-HEATING_CIRCUIT_9_ERROR_NUMBER = 5800
-HEATING_CIRCUIT_9_OPERATING_STATE = 5801
-HEATING_CIRCUIT_9_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5802
-HEATING_CIRCUIT_9_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5803
-HEATING_CIRCUIT_9_SETPOINT_TEMPERATURE_FLOW_LINE = 5804
-HEATING_CIRCUIT_9_SETPOINT_TEMPERATURE_RETURN_LINE = 5805
-HEATING_CIRCUIT_9_OPERATING_MODE = 5806
-HEATING_CIRCUIT_9_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5850
-HEATING_CIRCUIT_9_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5851
-HEATING_CIRCUIT_9_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5852
+    # Solar 1
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_error_number",
+        "register": 4000,
+        "type": "LambdaErrorSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_operating_state",
+        "register": 4001,
+        "type": "LambdaStateSensor",
+        "states_function": "get_solar_operating_states",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_actual_temperatur_collector_sensor", 
+        "register": 4002,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_actual_temperature_buffer_1_sensor",
+        "register": 4003,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_actual_temperature_buffer_2_sensor",
+        "register": 4004,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_setting_for_maximum_buffer_temperature",
+        "register": 4050,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 25.0,
+        "max": 90.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "solar_1",
+        "name": "solar_1_setting_for_buffer_changeover_temperature",
+        "register": 4051,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 25.0,
+        "max": 90.0,
+        "data_format": "int16"
+    },
 
-# Heating Circuit 10
-HEATING_CIRCUIT_10_ERROR_NUMBER = 5900
-HEATING_CIRCUIT_10_OPERATING_STATE = 5901
-HEATING_CIRCUIT_10_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 5902
-HEATING_CIRCUIT_10_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 5903
-HEATING_CIRCUIT_10_SETPOINT_TEMPERATURE_FLOW_LINE = 5904
-HEATING_CIRCUIT_10_SETPOINT_TEMPERATURE_RETURN_LINE = 5905
-HEATING_CIRCUIT_10_OPERATING_MODE = 5906
-HEATING_CIRCUIT_10_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 5950
-HEATING_CIRCUIT_10_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 5951
-HEATING_CIRCUIT_10_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 5952
 
-# Heating Circuit 11
-HEATING_CIRCUIT_11_ERROR_NUMBER = 51000
-HEATING_CIRCUIT_11_OPERATING_STATE = 51001
-HEATING_CIRCUIT_11_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 51002
-HEATING_CIRCUIT_11_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 51003
-HEATING_CIRCUIT_11_SETPOINT_TEMPERATURE_FLOW_LINE = 51004
-HEATING_CIRCUIT_11_SETPOINT_TEMPERATURE_RETURN_LINE = 51005
-HEATING_CIRCUIT_11_OPERATING_MODE = 51006
-HEATING_CIRCUIT_11_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 51050
-HEATING_CIRCUIT_11_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 51051
-HEATING_CIRCUIT_11_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 51052
-
-# Heating Circuit 12
-HEATING_CIRCUIT_12_ERROR_NUMBER = 51100
-HEATING_CIRCUIT_12_OPERATING_STATE = 51101
-HEATING_CIRCUIT_12_ACTUAL_TEMPERATURE_FLOW_LINE_SENSOR = 51102
-HEATING_CIRCUIT_12_ACTUAL_TEMPERATURE_RETURN_LINE_SENSOR = 51103
-HEATING_CIRCUIT_12_SETPOINT_TEMPERATURE_FLOW_LINE = 51104
-HEATING_CIRCUIT_12_SETPOINT_TEMPERATURE_RETURN_LINE = 51105
-HEATING_CIRCUIT_12_OPERATING_MODE = 51106
-HEATING_CIRCUIT_12_SETTING_FOR_FLOW_LINE_TEMPERATURE_SETPOINT_OFFSET = 51150
-HEATING_CIRCUIT_12_SETTING_FOR_HEATING_MODE_ROOM_SETPOINT_TEMPERATURE = 51151
-HEATING_CIRCUIT_12_SETTING_FOR_COOLING_MODE_ROOM_SETPOINT_TEMPERATURE = 51152
-
+    # Heating Circuit 1
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_error_number",
+        "register": 5000,
+        "type": "LambdaErrorSensor",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_operating_state",
+        "register": 5001,
+        "type": "LambdaStateSensor",
+        "states_function": "get_heating_circuit_operating_states",
+        "data_format": "uint16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_actual_temperature_flow_line_sensor",
+        "register": 5002,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_actual_temperature_return_line_sensor",
+        "register": 5003,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.01,
+        "unit_of_measurement": "°C",
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_actual_temperature_room_device_sensor",
+        "register": 5004,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": -29.9,
+        "max": 99.9,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_setpoint_temperature_flow_line",
+        "register": 5005,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 15.0,
+        "max": 65.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_operating_mode",
+        "register": 5006,
+        "type": "LambdaStateSensor",
+        "states_function": "get_heating_circuit_operating_modes"     ,
+        "data_format": "int16"   
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_setting_for_flow_line_temperature_setpoint_offset",
+        "register": 5050,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "K",
+        "min": -10.0,
+        "max": 10.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_setting_for_heating_mode_room_setpoint_temperature",
+        "register": 5051,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 15.0,
+        "max": 40.0,
+        "data_format": "int16"
+    },
+    {
+        "bereich": "heating_circuit_1",
+        "name": "heating_circuit_1_setting_for_cooling_mode_room_setpoint_temperature",
+        "register": 5052,
+        "type": "LambdaTemperaturSensor",
+        "factor": 0.1,
+        "unit_of_measurement": "°C",
+        "min": 15.0,
+        "max": 40.0,
+        "data_format": "int16"
+    },
+]
 
 
 async def async_get_translation(hass, key, language="en"):
     translations = await async_get_translations(hass, language, DOMAIN)
     return translations.get(key, key)
 
-
 def get_operating_states(language="en"):
-    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
     states = {
         0: "OFF",
         1: "AUTOMATIC",
         2: "MANUAL",
-        3: "ERROR"
+        3: "ERROR",
+        4: "OFFLINE"
     }
     return states
+
+def get_hp_error_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "NONE",
+        1: "MESSAGE",
+        2: "WARNING",
+        3: "ALARM",
+        4: "FAULT"
+    }
+    return states
+
+def get_hp_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "INIT",
+        1: "REFERENCE",
+        2: "RESTART-BLOCK",
+        3: "READY",
+        4: "START PUMPS",
+        5: "START COMPRESSOR",
+        6: "PRE-REGULATION",
+        7: "REGULATION",
+        8: "Not Used",
+        9: "COOLING",
+        10: "DEFROSTING",
+        20: "STOPPING",
+        30: "FAULT-LOCK",
+        31: "ALARM-BLOCK",
+        40: "ERROR-RESET"
+    }
+    return states
+
+
+def get_hp_operation_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "STBY",
+        1: "CH",
+        2: "DHW",
+        3: "CC",
+        4: "CIRCULATE",
+        5: "DEFROST",
+        6: "OFF",
+        7: "FROST",
+        8: "STBY-FROST",
+        9: "Not used",
+        10: "SUMMER",
+        11: "HOLIDAY",
+        12: "ERROR",
+        13: "WARNING",
+        14: "INFO-MESSAGE",
+        15: "TIME-BLOCK",
+        16: "RELEASE-BLOCK",
+        17: "MINTEMP-BLOCK",
+        18: "FIRMWARE-DOWNLOAD"
+    }
+    return states
+
+def get_hp_request_types(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    types = {
+        0: "NO REQUEST",
+        1: "FLOW PUMP CIRCULATION",
+        2: "CENTRAL HEATING",
+        3: "CENTRAL COOLING",
+        4: "DOMESTIC HOT WATER"
+    }
+    return types
+
+def get_hp_relais_states(language="en"):
+    # 1 = NO-Relais for 2nd heating stage is activated
+    states = {
+        0: "OFF",
+        1: "ON"
+    }
+    return states
+
+def get_boiler_operating_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "STBY",
+        1: "DHW",
+        2: "LEGIO",
+        3: "SUMMER",
+        4: "FROST",
+        5: "HOLIDAY",
+        6: "PRIO-STOP",
+        7: "ERROR",
+        8: "OFF",
+        9: "PROMPT-DHW",
+        10: "TRAILING-STOP",
+        11: "TEMP-LOCK",
+        12: "STBY-FROST"
+    }
+    return states
+
+def get_buffer_operating_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "STBY",
+        1: "HEATING",
+        2: "COOLING",
+        3: "SUMMER",
+        4: "FROST",
+        5: "HOLIDAY",
+        6: "PRIO-STOP",
+        7: "ERROR",
+        8: "OFF",
+        9: "STBY-FROST"
+    }
+    return states
+
+def get_solar_operating_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "STBY",
+        1: "HEATING",
+        2: "ERROR",
+        3: "OFF"
+    }
+    return states
+
+
+def get_heating_circuit_operating_states(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    states = {
+        0: "HEATING",
+        1: "ECO",
+        2: "COOLING",
+        3: "FLOORDRY",
+        4: "FROST",
+        5: "MAX-TEMP",
+        6: "ERROR",
+        7: "SERVICE",
+        8: "HOLIDAY",
+        9: "CH-SUMMER",
+        10: "CC-WINTER",
+        11: "PRIO-STOP",
+        12: "OFF",
+        13: "RELEASE-OFF",
+        14: "TIME-OFF",
+        15: "STBY",
+        16: "STBY-HEATING",
+        17: "STBY-ECO",
+        18: "STBY-COOLING",
+        19: "STBY-FROST",
+        20: "STBY-FLOORDRY"
+    }
+    return states
+
+
+def get_heating_circuit_operating_modes(language="en"):
+    # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
+    modes = {
+        0: "OFF",
+        1: "MANUAL",
+        2: "AUTOMATIC",
+        3: "AUTO-HEATING",
+        4: "AUTO-COOLING",
+        5: "FROST",
+        6: "SUMMER",
+        7: "FLOOR-DRY"
+    }
+    return modes

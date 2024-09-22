@@ -3,7 +3,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.translation import async_get_translations
+# from homeassistant.helpers.translation import async_get_translations
 from pymodbus.client import ModbusTcpClient
 from .coordinator import LambdaHeatpumpCoordinator
 
