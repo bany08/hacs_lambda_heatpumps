@@ -14,6 +14,9 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, config_entry):
     """Initialisiere die Integration mit einem config_entry."""
     # _LOGGER.debug(f"Config Entry: {config_entry.data}")  # Füge Logging hinzu, um die Konfigurationsdaten zu überprüfen
+    # Überprüfen Sie, ob der Eintrag bereits eingerichtet wurde
+    if config_entry.entry_id in hass.data.setdefault(DOMAIN, {}):
+        return True
     
     # Konfigurationsparameter aus config_entry abrufen
     host = config_entry.data.get("modbus_host")
@@ -34,68 +37,31 @@ async def async_setup_entry(hass, config_entry):
     # Leite das Setup an die Sensor-Komponente weiter
     await hass.config_entries.async_forward_entry_setups(config_entry, ["sensor"])
 
+    # Register the options flow
+    config_entry.add_update_listener(async_update_options)
 
     return True
 
 async def async_unload_entry(hass, config_entry):
     """Entferne die Integration."""
-    unload_ok = await hass.config_entries.async_forward_entry_unload(config_entry, "sensor")
+    # unload_ok = await hass.config_entries.async_forward_entry_unload(config_entry, "sensor")
+    # if unload_ok:
+    #     hass.data[DOMAIN].pop(config_entry.entry_id)
+    # return unload_ok
+
+    unload_ok = await hass.config_entries.async_unload_platforms(config_entry, ["sensor"])
     if unload_ok:
         hass.data[DOMAIN].pop(config_entry.entry_id)
     return unload_ok
 
+async def async_reload_entry(hass, config_entry):
+    """Reload config entry."""
+    await async_unload_entry(hass, config_entry)
+    await async_setup_entry(hass, config_entry)
+
+async def async_update_options(hass: HomeAssistant, config_entry: ConfigEntry):
+    """Handle options update."""
+    await hass.config_entries.async_reload(config_entry.entry_id)
 
 
 
-
-# async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-#     """Set up the Lambda Heatpumps component."""
-#     hass.data.setdefault(DOMAIN, {})
-#     return True
-
-# async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-#     """Set up Lambda Heatpumps from a config entry."""
-#     hass.data[DOMAIN][entry.entry_id] = entry.data
-
-#     # Forward the setup to the sensor platform
-#     await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
-
-#     # Read the software version from Modbus
-#     client = ModbusTcpClient(
-#         host=entry.data[CONF_MODBUS_HOST],
-#         port=entry.data[CONF_MODBUS_PORT]
-#     )
-#     if client.connect():
-#         result = client.read_holding_registers(200, 1, unit=entry.data[CONF_SLAVE_ID])  # Beispielregister für SW-Version
-#         if not result.isError():
-#             sw_version = result.registers[0]
-#         else:
-#             sw_version = "unknown"
-#         client.close()
-#     else:
-#         sw_version = "unknown"
-
-#     # Add device registry information
-#     device_registry = dr.async_get(hass)
-
-#     language = hass.config.language
-#     translations = await async_get_translations(hass, language, "lambda_heatpumps")
-#     # name = translations.get("device_name", "Lambda Heatpump 123")
-#     name = translations.get("device_name", "Lambda Heatpump")
-
-#     device_registry.async_get_or_create(
-#         config_entry_id=entry.entry_id,
-#         identifiers={(DOMAIN, entry.entry_id)},
-#         name=name,
-#         manufacturer=MANUFACTURER,
-#         model=entry.data[CONF_MODEL],
-#         #sw_version=str(sw_version)
-#     )
-
-#     return True
-
-# async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-#     """Unload a config entry."""
-#     await hass.config_entries.async_forward_entry_unload(entry, "sensor")
-#     hass.data[DOMAIN].pop(entry.entry_id)
-#     return True

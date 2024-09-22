@@ -280,6 +280,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         name="Coefficient of Performance",
         register=1013,
         data_type="int16",
+        factor=0.01,
         unit_of_measurement="%",
         device_class=SensorDeviceClass.POWER_FACTOR
     ),
@@ -552,13 +553,13 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
 
     # Heating Circuit 1
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_error_number",
+        key="heatingcircuit_1_error_number",
         name="Error Number",
         register=5000,
         data_type="int16",
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_operating_state",
+        key="heatingcircuit_1_operating_state",
         name="Operating State",
         register=5001,
         data_type="uint16",
@@ -587,7 +588,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         }
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_actual_temperature_flow_line_sensor",
+        key="heatingcircuit_1_actual_temperature_flow_line_sensor",
         name="Actual Temperature Flow Line Sensor",
         register=5002,
         data_type="int16",
@@ -596,7 +597,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         device_class=SensorDeviceClass.TEMPERATURE
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_actual_temperature_return_line_sensor",
+        key="heatingcircuit_1_actual_temperature_return_line_sensor",
         name="Actual Temperature Return Line Sensor",
         register=5003,
         data_type="int16",
@@ -605,7 +606,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         device_class=SensorDeviceClass.TEMPERATURE
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_actual_temperature_room_device_sensor",
+        key="heatingcircuit_1_actual_temperature_room_device_sensor",
         name="Actual Temperature Room Device Sensor",
         register=5004,
         data_type="int16",
@@ -616,7 +617,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         device_class=SensorDeviceClass.TEMPERATURE
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_setpoint_temperature_flow_line",
+        key="heatingcircuit_1_setpoint_temperature_flow_line",
         name="Setpoint Temperature Flow Line",        
         register=5005,
         data_type="int16",
@@ -627,7 +628,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         device_class=SensorDeviceClass.TEMPERATURE
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_operating_mode",
+        key="heatingcircuit_1_operating_mode",
         name="Operating Mode",
         register=5006,
         data_type="int16",
@@ -643,7 +644,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         }
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_setting_for_flow_line_temperature_setpoint_offset",
+        key="heatingcircuit_1_setting_for_flow_line_temperature_setpoint_offset",
         name="Setting for Flow Line Temperature Setpoint Offset",
         register=5050,
         data_type="int16",
@@ -654,7 +655,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         device_class=SensorDeviceClass.TEMPERATURE
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_setting_for_heating_mode_room_setpoint_temperature",
+        key="heatingcircuit_1_setting_for_heating_mode_room_setpoint_temperature",
         name="Setting for Heating Mode Room Setpoint Temperature",
         register=5051,
         data_type="int16",
@@ -665,7 +666,7 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         device_class=SensorDeviceClass.TEMPERATURE
     ),
     LambdaSensorEntityDescription(
-        key="heating_circuit_1_setting_for_cooling_mode_room_setpoint_temperature",
+        key="heatingcircuit_1_setting_for_cooling_mode_room_setpoint_temperature",
         name="Setting for Cooling Mode Room Setpoint Temperature",
         register=5052,
         data_type="int16",
@@ -750,7 +751,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, asyn
     num_boilers = config_entry.data.get("amount_of_boilers", 0)
     num_buffers = config_entry.data.get("amount_of_buffers", 0)
     num_solar = config_entry.data.get("amount_of_solar", 0)
-    num_heating_circuits = config_entry.data.get("amount_of_heat_circuits", 1)
+    num_heatingcircuits = config_entry.data.get("amount_of_heat_circuits", 1)
     model = config_entry.data.get("model", "Unknown Model")  # Hole das Modell aus der Konfiguration
 
     device_infos = {
@@ -801,13 +802,13 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, asyn
             model=model,
         )
 
-    for i in range(1, num_heating_circuits + 1):
-        device_infos[f"heating_circuit_{i}"] = DeviceInfo(
-            identifiers={(DOMAIN, f"{config_entry.entry_id}_heating_circuit_{i}")},
-            name=f"Lambda Heating Circuit {i}",
-            manufacturer=MANUFACTURER,
-            model=model,
-        )
+    for i in range(1, num_heatingcircuits + 1):
+       device_infos[f"heatingcircuit_{i}"] = DeviceInfo(
+           identifiers={(DOMAIN, f"{config_entry.entry_id}_heatingcircuit_{i}")},
+           name=f"Lambda Heating Circuit {i}",
+           manufacturer=MANUFACTURER,
+           model=model,
+       )
     sensors = []
     for description in SENSOR_DESCRIPTIONS:
         if "heatpump_" in description.key and int(description.key.split('_')[1]) > num_heatpumps:
@@ -818,13 +819,15 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, asyn
             continue
         if "solar_" in description.key and int(description.key.split('_')[1]) > num_solar:
             continue
-        if "heating_circuit_" in description.key and int(description.key.split('_')[2]) > num_heating_circuits:
+        if "heatingcircuit_" in description.key and int(description.key.split('_')[1]) > num_heatingcircuits:
             continue
 
         category = description.key.split('_')[0]
-        device_info = device_infos.get(description.key.split('_')[0], device_infos.get(f"{category}_{description.key.split('_')[1]}", None))
+        # device_info = device_infos.get(description.key.split('_')[0], device_infos.get(f"{category}_{description.key.split('_')[1]}", None))
+        device_info = device_infos.get(f"{category}_{description.key.split('_')[1]}", device_infos.get(category, None))
 
-
+        _LOGGER.debug("Creating sensor: %s with device_info: %s", description.key, device_info)
+        
         sensor = LambdaHeatpumpSensor(
             coordinator=coordinator,
             config_entry=config_entry,

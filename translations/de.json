@@ -23,7 +23,11 @@
         }
       },
       "abort": {
-        "already_configured": "Gerät ist bereits konfiguriert."
+        "already_configured": "Gerät ist bereits konfiguriert.",
+        "no_devices_found": "Keine Geräte gefunden.",
+        "cannot_connect": "Verbindung zum Gerät fehlgeschlagen.",
+        "invalid_slave_id": "Ungültige Slave-ID.",
+        "restart_required": "Konfiguration geändert. Bitte starten Sie Home Assistant neu."
       },
       "error": {
         "cannot_connect": "Kann keine Verbindung zum Gerät herstellen.",

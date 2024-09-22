@@ -486,23 +486,23 @@ SENSOR_CONFIG = [
 
     # Heating Circuit 1
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_error_number",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_error_number",
         "register": 5000,
         "type": "LambdaErrorSensor",
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_operating_state",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_operating_state",
         "register": 5001,
         "type": "LambdaStateSensor",
-        "states_function": "get_heating_circuit_operating_states",
+        "states_function": "get_heatingcircuit_operating_states",
         "data_format": "uint16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_actual_temperature_flow_line_sensor",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_actual_temperature_flow_line_sensor",
         "register": 5002,
         "type": "LambdaTemperaturSensor",
         "factor": 0.1,
@@ -510,8 +510,8 @@ SENSOR_CONFIG = [
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_actual_temperature_return_line_sensor",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_actual_temperature_return_line_sensor",
         "register": 5003,
         "type": "LambdaTemperaturSensor",
         "factor": 0.01,
@@ -519,8 +519,8 @@ SENSOR_CONFIG = [
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_actual_temperature_room_device_sensor",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_actual_temperature_room_device_sensor",
         "register": 5004,
         "type": "LambdaTemperaturSensor",
         "factor": 0.1,
@@ -530,8 +530,8 @@ SENSOR_CONFIG = [
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_setpoint_temperature_flow_line",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_setpoint_temperature_flow_line",
         "register": 5005,
         "type": "LambdaTemperaturSensor",
         "factor": 0.1,
@@ -541,16 +541,16 @@ SENSOR_CONFIG = [
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_operating_mode",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_operating_mode",
         "register": 5006,
         "type": "LambdaStateSensor",
-        "states_function": "get_heating_circuit_operating_modes"     ,
+        "states_function": "get_heatingcircuit_operating_modes"     ,
         "data_format": "int16"   
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_setting_for_flow_line_temperature_setpoint_offset",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_setting_for_flow_line_temperature_setpoint_offset",
         "register": 5050,
         "type": "LambdaTemperaturSensor",
         "factor": 0.1,
@@ -560,8 +560,8 @@ SENSOR_CONFIG = [
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_setting_for_heating_mode_room_setpoint_temperature",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_setting_for_heating_mode_room_setpoint_temperature",
         "register": 5051,
         "type": "LambdaTemperaturSensor",
         "factor": 0.1,
@@ -571,8 +571,8 @@ SENSOR_CONFIG = [
         "data_format": "int16"
     },
     {
-        "bereich": "heating_circuit_1",
-        "name": "heating_circuit_1_setting_for_cooling_mode_room_setpoint_temperature",
+        "bereich": "heatingcircuit_1",
+        "name": "heatingcircuit_1_setting_for_cooling_mode_room_setpoint_temperature",
         "register": 5052,
         "type": "LambdaTemperaturSensor",
         "factor": 0.1,
@@ -721,7 +721,7 @@ def get_solar_operating_states(language="en"):
     return states
 
 
-def get_heating_circuit_operating_states(language="en"):
+def get_heatingcircuit_operating_states(language="en"):
     # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
     states = {
         0: "HEATING",
@@ -749,7 +749,7 @@ def get_heating_circuit_operating_states(language="en"):
     return states
 
 
-def get_heating_circuit_operating_modes(language="en"):
+def get_heatingcircuit_operating_modes(language="en"):
     # Beispielhafte Zustände, diese sollten entsprechend der tatsächlichen Zustände angepasst werden
     modes = {
         0: "OFF",

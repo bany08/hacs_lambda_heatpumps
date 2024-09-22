@@ -23,7 +23,11 @@
             }
         },
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "Device is already configured",
+            "no_devices_found": "No devices found",
+            "cannot_connect": "Failed to connect to the device",
+            "invalid_slave_id": "Invalid slave ID",
+            "restart_required": "Configuration updated. Please restart Home Assistant."
         },
         "error": {
             "cannot_connect": "Cannot connect to the device.",
