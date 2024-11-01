@@ -90,6 +90,13 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         name="Operating State",
         register=101,
         data_type="uint16",
+        states = {
+            0: "OFF",
+            1: "AUTOMATIK",
+            2: "MANUAL",
+            3: "ERROR",
+            4: "OFFLINE"
+        }
     ),
     LambdaSensorEntityDescription(
         key="e_manager_actual_power_input",
@@ -419,15 +426,15 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         unit_of_measurement="°C",
         device_class=SensorDeviceClass.TEMPERATURE
     ),
-    LambdaSensorEntityDescription(
-        key="boiler_1_setting_for_maximum_boiler_temperature",
-        name="Setting for Maximum Boiler Temperature",
-        register=2050,
-        data_type="int16",
-        factor=0.1,
-        unit_of_measurement="°C",
-        device_class=SensorDeviceClass.TEMPERATURE
-    ),
+    # LambdaSensorEntityDescription(
+    #     key="boiler_1_setting_for_maximum_boiler_temperature",
+    #     name="Setting for Maximum Boiler Temperature",
+    #     register=2050,
+    #     data_type="int16",
+    #     factor=0.1,
+    #     unit_of_measurement="°C",
+    #     device_class=SensorDeviceClass.TEMPERATURE
+    # ),
 
     # Buffer 1
     LambdaSensorEntityDescription(

@@ -11,7 +11,9 @@ from .const import MANUFACTURER, DOMAIN, CONF_MODBUS_HOST, CONF_MODBUS_PORT, CON
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup_entry(hass, config_entry):
+PLATFORMS = ["sensor", "number"]
+
+async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Initialisiere die Integration mit einem config_entry."""
     # _LOGGER.debug(f"Config Entry: {config_entry.data}")  # Füge Logging hinzu, um die Konfigurationsdaten zu überprüfen
     # Überprüfen Sie, ob der Eintrag bereits eingerichtet wurde
@@ -35,24 +37,28 @@ async def async_setup_entry(hass, config_entry):
     hass.data.setdefault(DOMAIN, {})[config_entry.entry_id] = coordinator
 
     # Leite das Setup an die Sensor-Komponente weiter
-    await hass.config_entries.async_forward_entry_setups(config_entry, ["sensor"])
+    # await hass.config_entries.async_forward_entry_setups(config_entry, ["sensor"])
+    await hass.config_entries.async_forward_entry_setups(config_entry, PLATFORMS)
 
     # Register the options flow
     config_entry.add_update_listener(async_update_options)
 
     return True
 
-async def async_unload_entry(hass, config_entry):
+async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Entferne die Integration."""
     # unload_ok = await hass.config_entries.async_forward_entry_unload(config_entry, "sensor")
     # if unload_ok:
     #     hass.data[DOMAIN].pop(config_entry.entry_id)
     # return unload_ok
 
-    unload_ok = await hass.config_entries.async_unload_platforms(config_entry, ["sensor"])
-    if unload_ok:
-        hass.data[DOMAIN].pop(config_entry.entry_id)
-    return unload_ok
+    # unload_ok = await hass.config_entries.async_unload_platforms(config_entry, ["sensor"])
+    
+    # if unload_ok:
+    #     hass.data[DOMAIN].pop(config_entry.entry_id)
+    # return unload_ok
+
+    return await hass.config_entries.async_unload_platforms(config_entry, PLATFORMS)
 
 async def async_reload_entry(hass, config_entry):
     """Reload config entry."""

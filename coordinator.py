@@ -1,7 +1,7 @@
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from pymodbus.exceptions import ConnectionException
 from pymodbus.client import ModbusTcpClient
-from pymodbus.payload import BinaryPayloadDecoder
+from pymodbus.payload import BinaryPayloadDecoder, BinaryPayloadBuilder
 from pymodbus.constants import Endian
 from datetime import timedelta
 import logging
@@ -94,4 +94,40 @@ class LambdaHeatpumpCoordinator(DataUpdateCoordinator):
         """Schließe die Verbindung beim Herunterfahren."""
         if self._client:
             self._client.close()
+
+    async def async_write_register(self, register, value):
+        """Schreibe einen Wert in ein Modbus-Register."""
+        try:
+            if not self._client or not self._client.is_socket_open():
+                self._client = ModbusTcpClient(self.host, self.port)
+                if not await self.hass.async_add_executor_job(self._client.connect):
+                    raise UpdateFailed(f"Failed to connect to Modbus client {self.host}:{self.port}")
+
+            # Erstelle eine Funktion, die das Schreiben durchführt
+            def write_to_register():
+                return self._client.write_registers(
+                    address=register,
+                    values=[value],
+                    slave=self.slave_id
+                )
+
+            # Führe die Schreiboperation in einem Executor aus
+            result = await self.hass.async_add_executor_job(write_to_register)
+
+            if result.isError():
+                raise UpdateFailed(f"Failed to write to register {register}: {result}")
+
+            _LOGGER.debug(f"Successfully wrote value {value} to register {register}")
+
+            # Aktualisiere die lokalen Daten
+            await self.async_request_refresh()
+
+        except Exception as err:
+            _LOGGER.exception(f"Error writing to register {register}: {err}")
+            raise UpdateFailed(f"Error writing to register {register}: {err}")
+
+
+
+    def _write_registers(self, register, payload, count):
+        return self._client.write_registers(register, payload, unit=self.slave_id, count=count)
 

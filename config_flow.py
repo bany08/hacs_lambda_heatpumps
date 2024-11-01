@@ -67,7 +67,7 @@ class LambdaHeatpumpsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             client.close()
 
     def get_config_schema(self):
-        model_options = ["EU8L", "EU13L", "EU15L", "EU20L"]
+        model_options = ["EU8L", "EU10L", "EU13L", "EU15L", "EU20L"]
         return vol.Schema({
             vol.Required(CONF_MODBUS_HOST): str,
             vol.Required(CONF_MODBUS_PORT, default=DEFAULT_PORT): int,

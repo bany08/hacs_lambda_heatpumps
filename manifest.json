@@ -3,7 +3,7 @@
     "name": "Lambda Heatpump Integration",
     "documentation": "https://github.com/bany08/hacs_lambda_heatpumps",
     "issue_tracker": "https://github.com/bany08/hacs_lambda_heatpumps/issues",
-    "dependencies": ["modbus"],
+    "dependencies": ["modbus","climate"],
     "codeowners": ["@bany08"],
     "requirements": ["pymodbus"],
     "config_flow": true,
