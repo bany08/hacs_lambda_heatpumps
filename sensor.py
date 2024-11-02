@@ -267,8 +267,8 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         name="Actual Heating Capacity",
         register=1011,
         data_type="int16",
-        factor=0.01,
-        unit_of_measurement="kW",
+        factor=10,
+        unit_of_measurement="W",
         device_class=SensorDeviceClass.POWER,
         state_class=SensorStateClass.MEASUREMENT
     ),
@@ -288,7 +288,6 @@ SENSOR_DESCRIPTIONS: Final[tuple[LambdaSensorEntityDescription, ...]] = (
         register=1013,
         data_type="int16",
         factor=0.01,
-        unit_of_measurement="%",
         device_class=SensorDeviceClass.POWER_FACTOR
     ),
     LambdaSensorEntityDescription(
